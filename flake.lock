@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "hostlists": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758137273,
+        "narHash": "sha256-ObCo3e+5VeUgY5J/NH2Ka7x9FC/a2z4Y/2y00XweN20=",
+        "owner": "Snowy-Fluffy",
+        "repo": "zapret.cfgs",
+        "rev": "52e1b547c6e9ac96836b09eab89f3e9edb7bb69b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Snowy-Fluffy",
+        "repo": "zapret.cfgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1758427187,
+        "narHash": "sha256-pHpxZ/IyCwoTQPtFIAG2QaxuSm8jWzrzBGjwQZIttJc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "554be6495561ff07b6c724047bdd7e0716aa7b46",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "hostlists": "hostlists",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

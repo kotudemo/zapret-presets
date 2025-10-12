@@ -1,35 +1,63 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    secret_files.url = "github:kotudemo/secret_files";
-    zapret-hostlists.url = "github:kotudemo/zapret-hostlists";
+
+    hostlists = {
+      url = "github:Snowy-Fluffy/zapret.cfgs";
+      flake = false;
+    };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    secret_files,
-    zapret-hostlists,
-    ...
-  } @ inputs: let
-    forAllSystems = f:
-      nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ] (system: f (import nixpkgs {inherit system;}));
-  in {
-    formatter = forAllSystems (pkgs: pkgs.alejandra);
-    nixosModules.presets = {
-      self,
-      config,
-      pkgs,
-      lib,
-      ...
-    }:
-      import ./module.nix {
-        inherit self config pkgs lib;
-        inputs = inputs; # вот здесь передаём весь inputs
-      };
-  };
+  outputs =
+    inputs:
+    let
+      forAllSystems =
+        f:
+        inputs.nixpkgs.lib.genAttrs
+          [
+            "x86_64-linux"
+            "aarch64-linux"
+            "aarch64-darwin"
+          ]
+          (
+            system:
+            f (
+              import inputs.nixpkgs {
+                inherit
+                  system
+                  ;
+              }
+            )
+          );
+    in
+    {
+      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+
+      packages = forAllSystems (pkgs: {
+        secrets = pkgs.callPackage ./packages/secrets.nix { };
+        hostlists = pkgs.callPackage ./packages/hostlists.nix {
+          inherit
+            inputs
+            ;
+        };
+      });
+
+      nixosModules.presets =
+        {
+          self,
+          pkgs,
+          lib,
+          config,
+          ...
+        }:
+        import ./modules/nixos.nix {
+          inherit
+            self
+            inputs
+            pkgs
+            lib
+            config
+            ;
+        };
+    };
 }

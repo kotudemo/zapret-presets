@@ -1,11 +1,11 @@
- This flake brings some of [Snowy-Fluffy's zapret configurations](https://github.com/Snowy-Fluffy/zapret.cfgs) to NixOS 
+<div align="center"> <h1>
+  【 󰜗 NIX ZAPRET FIXES 󰜗 】
+</h1> </div>
 
-### ✅ Planned Improvements
----
-Add all lists from original repo + ytdisbystro
+adaptation [zapret.cfgs](https://github.com/Snowy-Fluffy/zapret.cfgs) for nixos
 
-Example configuration:
----
+## Example configuration:
+
 ```nix
 # flake.nix
 {
@@ -13,96 +13,78 @@ Example configuration:
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     zapret-presets.url = "github:kotudemo/zapret-presets";
-
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    zapret-presets,
-    ...
-  } @ inputs:
-  {
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem rec {
-        specialArgs = { inherit inputs; };
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          inputs.zapret-presets.nixosModules.presets
-        ];
+  outputs =
+    inputs:
+    let
+      inherit (nixpkgs)
+        lib
+        ;
+    in
+    {
+      nixosConfigurations = {
+        nixos = lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit
+              inputs
+              ;
+            };
+
+          modules = [
+            inputs.zapret-presets.nixosModules.presets
+            ...
+          ];
+        };
       };
     };
-  };
 }
 ```
-</div>
-
-<hr/>
-
-<hr/>
 
 ```nix
-# configuration.nix
+# ...
 {
-services = {
-    zapret = {
+  services.zapret = {
+    enable = true;
+
+    sf_presets = {
       enable = true;
-      sf_presets = {
-        enable = true;
-        preset = "renixos"; 
-      };
+
+      preset = "renixos";
     };
   };
 }
 ```
-</div>
 
-<hr/>
+## Available presets:
 
-
-<hr/>
-<div>
-  
-Available presets
 ```
-        "general"
-        "general_alt"
-        "general_alt2"
-        "general_alt3"
-        "general_alt4"
-        "general_alt5"
-        "general_alt6"
-        "general_mgts"
-        "general_mgts2"
+  "general"
+  "general_alt"
+  "general_alt2"
+  "general_alt3"
+  "general_alt4"
+  "general_alt5"
+  "general_alt6"
+  "general_mgts"
+  "general_mgts2"
 
-        "ultimatefix"
-        "ultimatefix_alt"
-        "ultimatefix_alt_extended"
-        "ultimatefix_universal"
-        "ultimatefix_universalv2"
-        "ultimatefix_universalv3"
-        "ultimatefix_mgts"
+  "ultimatefix"
+  "ultimatefix_alt"
+  "ultimatefix_alt_extended"
+  "ultimatefix_universal"
+  "ultimatefix_universalv2"
+  "ultimatefix_universalv3"
+  "ultimatefix_mgts"
 
-        "preset_russia"
-        "russiafix"
-        "renixos"
+  "preset_russia"
+  "russiafix"
+  "renixos"
 ```
-</div>
 
-<hr/>
+## **Special Thanks:**
 
-<hr/>
-<div>
-
-  <h3 align="center">Special Thanks: </h3>
-
-  [Snowy-Fluffy](https://github.com/Snowy-Fluffy)
-
-  [hand7s](https://github.com/s0me1newithhand7s)
-
-  [aca](https://github.com/aca/)
-  
-</div>
-
-<hr/>
+[Snowy-Fluffy](https://github.com/Snowy-Fluffy)
+[hand7s](https://github.com/s0me1newithhand7s)
+[aca](https://github.com/aca/)
